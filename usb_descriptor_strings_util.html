@@ -10,11 +10,9 @@ function convertText(txt,idNum)
     }
     return txt2.substring(0,txt2.length-1)+"<br/>";
 }
-var bootloaderName = "STM32duino bootloader v1.0 ";
+var bootloaderName = "Matrix bootloader v1.4.0";
 document.write("<pre>USB Strings for config.h\n\n");
-document.write("\t"+convertText(bootloaderName + " ERROR. Upload to RAM not supported.",0)+"<br/>");
-document.write("\t"+convertText(bootloaderName + " Upload to Flash 0x8005000",1)+"<br/>");
-document.write("\t"+convertText(bootloaderName + " Upload to Flash 0x8002000",2)+"<br/>");
+document.write("\t"+convertText(bootloaderName + " Upload Firmware",0)+"<br/>");
 
 
 document.write("</pre>");

@@ -72,6 +72,12 @@ SECTIONS
 		_sidata = _etext;
     } >FLASH
 
+  .matrix_info 0x08001E00:
+    {
+      KEEP(*(.matrix_info)) ;
+    } >FLASH
+
+
 /*
  * This is the initialized data section. It is stored in RAM but the initial values
  * are held in flash and copied to RAM by the startup code

@@ -33,6 +33,7 @@
 
 #include "common.h"
 #include "dfu.h"
+#include "matrix.h"
 extern volatile dfuUploadTypes_t userUploadType;
 
 int main()

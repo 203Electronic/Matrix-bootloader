@@ -35,7 +35,10 @@
 
 #include "common.h"
 
-
+#define BOOTLOADER_VERSION 140
+#define BOOTLOADER_MAJOR_VERSION 1
+#define BOOTLOADER_MINOR_VERSION 4
+#define BOOTLOADER_PATCH_VERSION 0
 
 /* Speed controls for strobing the LED pin */
 #define BLINK_FAST 0x50000
@@ -48,18 +51,6 @@
 // Clocks for the backup domain registers
 #define RCC_APB1ENR_PWR_CLK   0x10000000
 #define RCC_APB1ENR_BKP_CLK   0x08000000
-
-
-// Use the usb_description_strings_util.html to make new strngs for the next 3 arrays if you need to change the text.
-
-#define ALT0_STR_LEN 0x80
-#define ALT0_MSG_STR 'S',0,'T',0,'M',0,'3',0,'2',0,'d',0,'u',0,'i',0,'n',0,'o',0,' ',0,'b',0,'o',0,'o',0,'t',0,'l',0,'o',0,'a',0,'d',0,'e',0,'r',0,' ',0,'v',0,'1',0,'.',0,'0',0,' ',0,' ',0,'E',0,'R',0,'R',0,'O',0,'R',0,'.',0,' ',0,'U',0,'p',0,'l',0,'o',0,'a',0,'d',0,' ',0,'t',0,'o',0,' ',0,'R',0,'A',0,'M',0,' ',0,'n',0,'o',0,'t',0,' ',0,'s',0,'u',0,'p',0,'p',0,'o',0,'r',0,'t',0,'e',0,'d',0,'.',0
-
-#define ALT1_STR_LEN 0x6C
-#define ALT1_MSG_STR 'S',0,'T',0,'M',0,'3',0,'2',0,'d',0,'u',0,'i',0,'n',0,'o',0,' ',0,'b',0,'o',0,'o',0,'t',0,'l',0,'o',0,'a',0,'d',0,'e',0,'r',0,' ',0,'v',0,'1',0,'.',0,'0',0,' ',0,' ',0,'U',0,'p',0,'l',0,'o',0,'a',0,'d',0,' ',0,'t',0,'o',0,' ',0,'F',0,'l',0,'a',0,'s',0,'h',0,' ',0,'0',0,'x',0,'8',0,'0',0,'0',0,'5',0,'0',0,'0',0,'0',0
-
-#define ALT2_STR_LEN 0x6C
-#define ALT2_MSG_STR 'S',0,'T',0,'M',0,'3',0,'2',0,'d',0,'u',0,'i',0,'n',0,'o',0,' ',0,'b',0,'o',0,'o',0,'t',0,'l',0,'o',0,'a',0,'d',0,'e',0,'r',0,' ',0,'v',0,'1',0,'.',0,'0',0,' ',0,' ',0,'U',0,'p',0,'l',0,'o',0,'a',0,'d',0,' ',0,'t',0,'o',0,' ',0,'F',0,'l',0,'a',0,'s',0,'h',0,' ',0,'0',0,'x',0,'8',0,'0',0,'0',0,'2',0,'0',0,'0',0,'0',0
 
 // Jump locations for legacy bootloader (0x8005000) and new / smaller bootloder (0x8002000)
 #define USER_CODE_FLASH0X8005000    ((u32)0x08005000)
@@ -92,320 +83,55 @@
     #define BUTTON_PRESSED_STATE 1
 */
 
-#if defined TARGET_MAPLE_MINI
-
-    #define HAS_MAPLE_HARDWARE 1
-
-    #define LED_BANK         GPIOB
-    #define LED_PIN          1
-    #define LED_ON_STATE     1
-
-    /* On the Mini, BUT is PB8 */
-    #define BUTTON_BANK      GPIOB
-    #define BUTTON_PIN           8
-    #define BUTTON_PRESSED_STATE 1
-
-    /* USB Disc Pin Setup.   USB DISC is PB9 */
-    #define USB_DISC_BANK       GPIOB
-    #define USB_DISC_PIN            9
-
-#elif defined TARGET_MAPLE_REV3
-
-    #warning "Target MAPLE_REV3"
-
-// Flag that this type of board has the custom maple disconnect hardware
-    #define HAS_MAPLE_HARDWARE 1
-
-    #define LED_BANK         GPIOB
-    #define LED_PIN              1
-    #define LED_ON_STATE     1
-
-    #define BUTTON_BANK      GPIOB
-    #define BUTTON_PIN           8
-    #define BUTTON_PRESSED_STATE 1
-
-    /* USB Disc Pin Setup.   USB DISC is PC12 */
-    #define USB_DISC_BANK         GPIOC
-    #define USB_DISC_PIN             12
-
-#elif defined TARGET_MAPLE_REV5
-
-// Flag that this type of board has the custom maple disconnect hardware
-    #define HAS_MAPLE_HARDWARE 1
-
-    #define LED_BANK         GPIOA
-    #define LED_PIN              5
-    #define LED_ON_STATE     0
-
-    /* On the Mini, BUT is PB8 */
-    #define BUTTON_BANK      GPIOC
-    #define BUTTON_PIN           9
-    #define BUTTON_PRESSED_STATE 1
-
-    /* USB Disc Pin Setup.   USB DISC is PC12 */
-    #define USB_DISC_BANK         GPIOC
-    #define USB_DISC_PIN             12
-
-#elif defined TARGET_GENERIC_F103_PC13
-
-
-    #define LED_BANK            GPIOC
-    #define LED_PIN             13
-    #define LED_ON_STATE        0
-
-// Use Boot1 PB2 as the button, as hardly anyone uses this pin as GPIO
-// Need to set the button input mode to just CR_INPUT and not CR_INPUT_PU_PD because the external pullup on the jumplink is very weak
-	#define BUTTON_INPUT_MODE 	CR_INPUT
-    #define BUTTON_BANK GPIOB
-    #define BUTTON_PIN 2
-    #define BUTTON_PRESSED_STATE 1
-	
-#elif defined TARGET_GENERIC_F103_PC13_FASTBOOT
-
-
-    #define LED_BANK            GPIOC
-    #define LED_PIN             13
-    #define LED_ON_STATE        0
-
-// Use Boot1 PB2 as the button, as hardly anyone uses this pin as GPIO
-// Need to set the button input mode to just CR_INPUT and not CR_INPUT_PU_PD because the external pullup on the jumplink is very weak
-	#define BUTTON_INPUT_MODE 	CR_INPUT
-    #define BUTTON_BANK GPIOB
-    #define BUTTON_PIN 2
-    #define BUTTON_PRESSED_STATE 1
-
-	#define FASTBOOT 1
-
-#elif defined TARGET_GENERIC_F103_NONE
-
-
-#elif defined TARGET_GENERIC_F103_PG15
-
-    #define LED_BANK            GPIOG
-    #define LED_PIN             15
-    #define LED_ON_STATE        1
-
-    // Button (if you have one)
-    #define BUTTON_BANK GPIOC
-    #define BUTTON_PIN 14
-    #define BUTTON_PRESSED_STATE 1
-
-#elif defined TARGET_GENERIC_F103_PD2
-
-    #define LED_BANK            GPIOD
-    #define LED_PIN             2
-    #define LED_ON_STATE        1
-
-    // Button (if you have one)
-    #define BUTTON_BANK GPIOC
-    #define BUTTON_PIN 14
-    #define BUTTON_PRESSED_STATE 1
-
-#elif defined TARGET_GENERIC_F103_PD1
-
-    #define LED_BANK            GPIOD
-    #define LED_PIN             1
-    #define LED_ON_STATE        1
-
-    // Button (if you have one)
-    #define BUTTON_BANK GPIOC
-    #define BUTTON_PIN 14
-    #define BUTTON_PRESSED_STATE 1
-
-#elif defined TARGET_GENERIC_F103_PA1
-
-    #define LED_BANK            GPIOA
-    #define LED_PIN             1
-    #define LED_ON_STATE        1
-
-    // Button (if you have one)
-    #define BUTTON_BANK GPIOC
-    #define BUTTON_PIN 14
-    #define BUTTON_PRESSED_STATE 1
-
-#elif defined TARGET_GENERIC_F103_PA1_BUTTON_PA8
-
-    #define LED_BANK            GPIOA
-    #define LED_PIN             1
-    #define LED_ON_STATE        1
-
-    #define BUTTON_BANK GPIOA
-    #define BUTTON_PIN 8
-    #define BUTTON_PRESSED_STATE 0
-
-#elif defined TARGET_GENERIC_F103_PB9
-
-    #define LED_BANK            GPIOB
-    #define LED_PIN             9
-    #define LED_ON_STATE        1
-
-    // Button (if you have one)
-    #define BUTTON_BANK GPIOC
-    #define BUTTON_PIN 14
-    #define BUTTON_PRESSED_STATE 1
-
-#elif defined TARGET_GENERIC_F103_PE2
-
-    #define LED_BANK            GPIOE
-    #define LED_PIN             2
-    #define LED_ON_STATE        1
-
-#elif defined TARGET_GENERIC_F103_PA9
-
-    #define LED_BANK            GPIOA
-    #define LED_PIN             9
-    #define LED_ON_STATE        1
-
-#elif defined TARGET_GENERIC_F103_PE5
-
-    #define LED_BANK            GPIOE
-    #define LED_PIN             5
-    #define LED_ON_STATE        1
-
-    #define BUTTON_BANK GPIOD
-    #define BUTTON_PIN 2
-    #define BUTTON_PRESSED_STATE 1
-
-#elif defined TARGET_GENERIC_F103_PE5_BUTTON_PA0
-
-    #define LED_BANK            GPIOE
-    #define LED_PIN             5
-    #define LED_ON_STATE        1
-
-    #define BUTTON_BANK GPIOA
-    #define BUTTON_PIN 0
-    #define BUTTON_PRESSED_STATE 1
-
-#elif defined TARGET_GENERIC_F103_PB7
-
-    #define LED_BANK            GPIOB
-    #define LED_PIN             7
-    #define LED_ON_STATE        1
-
-#elif defined TARGET_GENERIC_F103_PB0
-
-    #define LED_BANK            GPIOB
-    #define LED_PIN         0
-    #define LED_ON_STATE        1
-    #define BOOTLOADER_WAIT 30
-
-#elif defined TARGET_STBEE
-
-    #define HAS_MAPLE_HARDWARE  1
-
-    #define LED_BANK        GPIOD
-    #define LED_PIN         4
-    #define LED_ON_STATE        0
-
-    /* BUTTON is PA0 (pull down) */
-    #define BUTTON_BANK     GPIOA
-    #define BUTTON_PIN      0
-    #define BUTTON_PRESSED_STATE    1
-
-    /* USB Disc Pin Setup.   USB DISC is PD3 */
-    #define USB_DISC_BANK           GPIOD
-    #define USB_DISC_PIN                3
-
-    /* CRISTAL 12MHz */
-    #define XTAL12M     1
-
-#elif defined TARGET_NAZE32
-
-    #define LED_BANK            GPIOB
-    #define LED_PIN             3
-    #define LED_ON_STATE        0
-
-#elif defined TARGET_GENERIC_F103_PB12
-
-    #define LED_BANK            GPIOB
-    #define LED_PIN             12
-    #define LED_ON_STATE        1
-    #define BOOTLOADER_WAIT 10
-
-    #define BUTTON_BANK      GPIOB
-    #define BUTTON_PIN           2
-    #define BUTTON_PRESSED_STATE 1
-
-#elif defined TARGET_HYTINY_STM32F103T
-
-    #define HAS_MAPLE_HARDWARE 1
-
-
-    #define LED_BANK            GPIOA
-    #define LED_PIN             1
-    #define LED_ON_STATE        0
-    #define BOOTLOADER_WAIT 30
-
-    /* USB Disc Pin Setup.   USB DISC is PA0 */
-    #define USB_DISC_BANK       GPIOA
-    #define USB_DISC_PIN            0
-
-#elif defined TARGET_DSO138
-
-    #define LED_BANK            GPIOA
-    #define LED_PIN             15
-    #define LED_ON_STATE        0
-
-    // "OK" Button
-    #define BUTTON_BANK GPIOB
-    #define BUTTON_PIN 15
-    #define BUTTON_PRESSED_STATE 0
-
-#elif defined TARGET_GD32F1_FRANKENMAPLE
-
-    #define HAS_MAPLE_HARDWARE 1
-
-    #define LED_BANK         GPIOC
-    #define LED_PIN          13
-    #define LED_ON_STATE     1
-
-
-    /*
-    #define BUTTON_BANK      GPIOB
-    #define BUTTON_PIN           8
-    #define BUTTON_PRESSED_STATE 1
-    */
-
-    /* USB Disc Pin Setup.   USB DISC is PB9 */
-    #define USB_DISC_BANK       GPIOB
-    #define USB_DISC_PIN        9
-
-    /* CRISTAL 12MHz */
-    #define XTAL12M     1
-
-#elif defined TARGET_GD32F1_GENERIC_F103_PC13
-
-    #define LED_BANK            GPIOC
-    #define LED_PIN             13
-    #define LED_ON_STATE        0
-
-    // Button (if you have one)
-
-//  #define BUTTON_BANK GPIOC
-//  #define BUTTON_PIN 14
-//  #define BUTTON_PRESSED_STATE 1
-
-    /* CRISTAL 12MHz */
-    #define XTAL12M     1
-
-#elif defined TARGET_STM32_SMART_V20
-
-    #define LED_BANK            GPIOC
-    #define LED_PIN             13
-    #define LED_ON_STATE        1
-
-    #define BUTTON_BANK GPIOA
-    #define BUTTON_PIN 0
-    #define BUTTON_PRESSED_STATE 1
-
-    /* CRISTAL 8MHz */
-
-#elif defined TARGET_CC3D
-
-    #define LED_BANK            GPIOB
-    #define LED_PIN             3
-    #define LED_ON_STATE        0
-
+#ifdef TARGET_MXPT_V120
+  #define FASTBOOT
+
+  #define BUTTON_BANK GPIOB
+  #define BUTTON_PIN 8
+  #define BUTTON_PRESSED_STATE 1
+
+  #define MATRIXINFO
+  #define MATRIX_VERSION 120
+  #define MATRIX_MODEL 0x4D585054
+  #define MATRIX_BATCH 0
+
+#elif defined TARGET_MXPT_V150
+  #define FASTBOOT
+
+  #define BUTTON_BANK GPIOB
+  #define BUTTON_PIN 7
+  #define BUTTON_PRESSED_STATE 1
+
+  #define MATRIXINFO
+  #define MATRIX_VERSION 150
+  #define MATRIX_MODEL 0x4D585054
+  #define MATRIX_BATCH 0
+
+#elif defined TARGET_MXPT_V210
+  #define FASTBOOT
+
+  #define BUTTON_BANK GPIOA
+  #define BUTTON_PIN 0
+  #define BUTTON_PRESSED_STATE 0
+
+  #define MATRIXINFO
+  #define MATRIX_VERSION 210
+  #define MATRIX_MODEL 0x4D585054
+  #define MATRIX_BATCH 0
+
+#elif defined TARGET_STLINKV2_M1
+#define MATRIX
+
+#define LED_BANK            GPIOA
+#define LED_PIN             9
+#define LED_ON_STATE        1
+
+#define BOOTLOADER_WAIT 6
+
+#define MATRIXINFO
+#define MATRIX_VERSION 0
+#define MATRIX_MODEL 0x4D584C53
+#define MATRIX_BATCH 0
 
 #else
     #error "No config for this target"
@@ -427,9 +153,9 @@
 #endif
 #endif
 
-// defines for USB (DONT CHANGE)
-#define VEND_ID0 0xAF
-#define VEND_ID1 0x1E
+// defines for USB PID&VID
+#define VEND_ID0 0x03
+#define VEND_ID1 0x02
 #define PROD_ID0 0x03
 #define PROD_ID1 0x00
 

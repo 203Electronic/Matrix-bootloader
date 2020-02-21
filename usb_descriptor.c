@@ -159,43 +159,29 @@ u8 u8_usbStringLangId[USB_STR_LANG_ID_LEN] = {
     0x09,
     0x04    /* LangID = 0x0409: U.S. English */
 };
-#define USB_VENDOR_STR_LEN 0x12
+#define USB_VENDOR_STR_LEN 0x20
 u8 u8_usbStringVendor[USB_VENDOR_STR_LEN] = {
     USB_VENDOR_STR_LEN,
     0x03,
-    'L', 0, 'e', 0, 'a', 0, 'f', 0, 'L', 0, 'a', 0, 'b', 0, 's', 0
+    '2', 0, '0', 0, '3', 0, ' ', 0, 'E', 0, 'l', 0, 'e', 0, 'c', 0, 't', 0, 'r', 0, 'o', 0, 'n', 0, 'i', 0, 'c', 0, 's', 0
 };
-#define USB_PRODUCT_STR_LEN 0x14
+#define USB_PRODUCT_STR_LEN 0x16
 u8 u8_usbStringProduct[USB_PRODUCT_STR_LEN] = {
     USB_PRODUCT_STR_LEN,
     0x03,
-    'M', 0, 'a', 0, 'p', 0, 'l', 0, 'e', 0, ' ', 0, '0', 0, '0', 0, '3', 0
+    'M', 0, 'a', 0, 't', 0, 'r', 0, 'i', 0, 'x', 0, ' ', 0, 'D', 0, 'F', 0, 'U', 0
 };
-#define USB_SERIAL_STR_LEN 0x10
+#define USB_SERIAL_STR_LEN 0x14
 u8 u8_usbStringSerial[USB_SERIAL_STR_LEN] = {
     USB_SERIAL_STR_LEN,
     0x03,
-    'L', 0, 'L', 0, 'M', 0, ' ', 0, '0', 0, '0', 0, '3', 0
+    '0', 0, '2', 0, '0', 0, '3', 0, ' ', 0, '0', 0, '0', 0, '0', 0, '3', 0
 };
-
-    u8 u8_usbStringAlt0[ALT0_STR_LEN] = {
+#define ALT0_STR_LEN 0x54
+u8 u8_usbStringAlt0[ALT0_STR_LEN] = {
     ALT0_STR_LEN,
     0x03,
-    ALT0_MSG_STR
-    };
-
-
-    u8 u8_usbStringAlt1[ALT1_STR_LEN] = {
-    ALT1_STR_LEN,
-    0x03,
-    ALT1_MSG_STR
-    };
-
-
-    u8 u8_usbStringAlt2[ALT2_STR_LEN] = {
-    ALT2_STR_LEN,
-    0x03,
-    ALT2_MSG_STR
+    'M',0,'a',0,'t',0,'r',0,'i',0,'x',0,' ',0,'b',0,'o',0,'o',0,'t',0,'l',0,'o',0,'a',0,'d',0,'e',0,'r',0,' ',0,'v',0, BOOTLOADER_MAJOR_VERSION +'0',0,'.',0, BOOTLOADER_MINOR_VERSION +'0',0,'.',0, BOOTLOADER_PATCH_VERSION +'0',0,' ',0,'U',0,'p',0,'l',0,'o',0,'a',0,'d',0,' ',0,'F',0,'i',0,'r',0,'m',0,'w',0,'a',0,'r',0,'e',0
     };
 
 u8 u8_usbStringInterface = NULL;
@@ -206,7 +192,5 @@ ONE_DESCRIPTOR usbStringDescriptor[STR_DESC_LEN] = {
     { (u8 *)u8_usbStringProduct, USB_PRODUCT_STR_LEN },
     { (u8 *)u8_usbStringSerial,  USB_SERIAL_STR_LEN },
     { (u8 *)u8_usbStringAlt0,    ALT0_STR_LEN },
-    { (u8 *)u8_usbStringAlt1,    ALT1_STR_LEN },
-    { (u8 *)u8_usbStringAlt2,    ALT2_STR_LEN }
 };
 
