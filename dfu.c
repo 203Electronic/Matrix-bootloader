@@ -93,27 +93,7 @@ bool dfuUpdateByRequest(void) {
                 dfuAppStatus.bState  = dfuDNLOAD_SYNC;
                 switch(pInformation->Current_AlternateSetting)
                 {
-                    /*
-                    Roger Clark. removed upload to RAM option
                     case 0:
-                        userAppAddr = USER_CODE_RAM;
-                        userUploadType = DFU_UPLOAD_RAM;
-                        break;
-                        */
-                    case 1:
-
-                        userAppAddr = USER_CODE_FLASH0X8005000;
-                        userUploadType = DFU_UPLOAD_FLASH_0X8005000;
-
-                        /* make sure the flash is setup properly, unlock it */
-                        setupFLASH();
-                        flashUnlock();
-                        // Clear lower memory so that we can check on cold boot, whether the last upload was to 0x8002000 or 0x8005000
-                        flashErasePage((u32)USER_CODE_FLASH0X8002000);
-                        bkp10Write(RTC_BOOTLOADER_JUST_UPLOADED);
-
-                        break;
-                    case 2:
                         userUploadType = DFU_UPLOAD_FLASH_0X8002000;
                         userAppAddr = USER_CODE_FLASH0X8002000;
                         /* make sure the flash is setup properly, unlock it */
@@ -142,16 +122,7 @@ bool dfuUpdateByRequest(void) {
             userFirmwareLen = uploadBlockLen * pInformation->USBwValue;
             switch(pInformation->Current_AlternateSetting)
             {
-            /*
                 case 0:
-                    userAppAddr = USER_CODE_RAM;
-                    userAppEnd = RAM_END;
-                    */
-                case 1:
-                    userAppAddr = USER_CODE_FLASH0X8005000;
-                    userAppEnd = getFlashEnd();
-                    break;
-                case 2:
                     userAppAddr = USER_CODE_FLASH0X8002000;
                     userAppEnd = getFlashEnd();
                     break;

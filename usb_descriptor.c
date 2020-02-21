@@ -80,7 +80,7 @@ ONE_DESCRIPTOR usbFunctionalDescriptor = {
     0x09
 };
 
-#define u8_usbConfigDescriptorDFU_LENGTH 45
+#define u8_usbConfigDescriptorDFU_LENGTH 27
 u8 u8_usbConfigDescriptorDFU[u8_usbConfigDescriptorDFU_LENGTH] = {
     0x09,   /* bLength: Configuation Descriptor size */
     0x02,   /* bDescriptorType: Configuration */
@@ -105,33 +105,6 @@ u8 u8_usbConfigDescriptorDFU[u8_usbConfigDescriptorDFU_LENGTH] = {
     0x02,   /* nInterfaceProtocol, switched to 0x02 while in dfu_mode */
 
     0x04,   /* iInterface: */
-
-    /************ Descriptor of DFU interface 0 Alternate setting 1 *********/
-    0x09,   /* bLength: Interface Descriptor size */
-    0x04,   /* bDescriptorType: */
-    0x00,   /* bInterfaceNumber: Number of Interface */
-    0x01,   /* bAlternateSetting: Alternate setting */
-    0x00,   /* bNumEndpoints*/
-    0xFE,   /* bInterfaceClass: DFU */
-    0x01,   /* bInterfaceSubClass */
-
-    0x02,   /* nInterfaceProtocol, switched to 0x02 while in dfu_mode */
-
-    0x05,   /* iInterface: */
-
-    /************ Descriptor of DFU interface 0 Alternate setting 2 *********/
-    0x09,   /* bLength: Interface Descriptor size */
-    0x04,   /* bDescriptorType: */
-    0x00,   /* bInterfaceNumber: Number of Interface */
-    0x02,   /* bAlternateSetting: Alternate setting */
-    0x00,   /* bNumEndpoints*/
-    0xFE,   /* bInterfaceClass: DFU */
-    0x01,   /* bInterfaceSubClass */
-
-    0x02,   /* nInterfaceProtocol, switched to 0x02 while in dfu_mode */
-
-    0x06,   /* iInterface: */
-
 
     /******************** DFU Functional Descriptor********************/
     0x09,   /*blength = 7 Bytes*/

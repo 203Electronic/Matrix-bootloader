@@ -131,7 +131,7 @@ copy_mxpt_v120:
 	cp $(TARGET).bin binaries/MXPT_V120.bin
 	@echo
 
-build_mxpt_v150: TARGETFLAGS= -DTARGET_MXPT_V120 $(DEFINES)
+build_mxpt_v150: TARGETFLAGS= -DTARGET_MXPT_V150 $(DEFINES)
 # Set the linker script
 build_mxpt_v150: LDFLAGS +=-T$(ST_LIB)/c_only_md_high_density.ld
 build_mxpt_v150: elf bin lss sym
@@ -142,7 +142,7 @@ copy_mxpt_v150:
 	cp $(TARGET).bin binaries/MXPT_V150.bin
 	@echo
 
-build_mxpt_v210: TARGETFLAGS= -DTARGET_MXPT_V120 $(DEFINES)
+build_mxpt_v210: TARGETFLAGS= -DTARGET_MXPT_V210 $(DEFINES)
 # Set the linker script
 build_mxpt_v210: LDFLAGS +=-T$(ST_LIB)/c_only_md_high_density.ld
 build_mxpt_v210: elf bin lss sym
@@ -153,7 +153,7 @@ copy_mxpt_v210:
 	cp $(TARGET).bin binaries/MXPT_V210.bin
 	@echo
 
-build_stlinkv2_m1: TARGETFLAGS= -DTARGET_MXPT_V120 $(DEFINES)
+build_stlinkv2_m1: TARGETFLAGS= -DTARGET_STLINKV2_M1 $(DEFINES)
 # Set the linker script
 build_stlinkv2_m1: LDFLAGS +=-T$(ST_LIB)/c_only_md_high_density.ld
 build_stlinkv2_m1: elf bin lss sym
