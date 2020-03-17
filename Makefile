@@ -116,6 +116,7 @@ all: begin gccversion build sizeafter finished end
 MXPT_V120: begin clean gccversion build_mxpt_v120 sizeafter finished copy_mxpt_v120 end
 MXPT_V150: begin clean gccversion build_mxpt_v150 sizeafter finished  copy_mxpt_v150 end
 MXPT_V210: begin clean gccversion build_mxpt_v210 sizeafter finished  copy_mxpt_v210 end
+MXPP_1: begin clean gccversion build_mxpp_1 sizeafter finished  copy_mxpp_1 end
 STLINKV2_M1: begin clean gccversion build_stlinkv2_m1 sizeafter finished  copy_stlinkv2_m1 end
 
 build: elf bin lss sym
@@ -151,6 +152,17 @@ copy_mxpt_v210:
 	@echo "Copying to binaries folder"
 	@echo
 	cp $(TARGET).bin binaries/MXPT_V210.bin
+	@echo
+
+build_mxpp_1: TARGETFLAGS= -DTARGET_MXPP_1 $(DEFINES)
+# Set the linker script
+build_mxpp_1: LDFLAGS +=-T$(ST_LIB)/c_only_md_high_density.ld
+build_mxpp_1: elf bin lss sym
+copy_mxpp_1:
+	@echo
+	@echo "Copying to binaries folder"
+	@echo
+	cp $(TARGET).bin binaries/MXPP_1.bin
 	@echo
 
 build_stlinkv2_m1: TARGETFLAGS= -DTARGET_STLINKV2_M1 $(DEFINES)

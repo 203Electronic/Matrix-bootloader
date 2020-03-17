@@ -119,6 +119,18 @@
   #define MATRIX_MODEL 0x4D585054
   #define MATRIX_BATCH 0
 
+#elif defined TARGET_MXPP_1
+  #define FASTBOOT
+
+  #define BUTTON_BANK GPIOA
+  #define BUTTON_PIN 0
+  #define BUTTON_PRESSED_STATE 1
+
+  #define MATRIXINFO
+  #define MATRIX_VERSION 1
+  #define MATRIX_MODEL 0x4D585050
+  #define MATRIX_BATCH 0
+
 #elif defined TARGET_STLINKV2_M1
 #define MATRIX
 
